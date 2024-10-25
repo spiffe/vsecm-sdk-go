@@ -6,9 +6,8 @@
 package env
 
 import (
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/env"
 	"strconv"
-
-	"github.com/spiffe/vsecm-sdk-go/core/constants/env"
 )
 
 type Level int

@@ -6,7 +6,7 @@
 package env
 
 import (
-	"github.com/spiffe/vsecm-sdk-go/core/constants/env"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/env"
 )
 
 // SecretsPathForSidecar returns the path to the secrets file used by the sidecar.

@@ -6,7 +6,7 @@
 package env
 
 import (
-	"github.com/spiffe/vsecm-sdk-go/core/constants/env"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/env"
 )
 
 // EndpointUrlForSafe returns the URL for the VSecM Safe endpoint

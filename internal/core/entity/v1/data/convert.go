@@ -9,11 +9,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/key"
+	tpl "github.com/spiffe/vsecm-sdk-go/internal/core/template"
 	"strings"
 	"text/template"
-
-	"github.com/spiffe/vsecm-sdk-go/core/constants/key"
-	tpl "github.com/spiffe/vsecm-sdk-go/core/template"
 )
 
 // convertMapToStringBytes converts a map[string]string into a map[string][]byte,

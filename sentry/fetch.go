@@ -17,11 +17,11 @@ import (
 	"github.com/spiffe/go-spiffe/v2/spiffetls/tlsconfig"
 	"github.com/spiffe/go-spiffe/v2/workloadapi"
 
-	reqres "github.com/spiffe/vsecm-sdk-go/core/entity/v1/reqres/safe"
-	"github.com/spiffe/vsecm-sdk-go/core/env"
-	log "github.com/spiffe/vsecm-sdk-go/core/log/std"
-	"github.com/spiffe/vsecm-sdk-go/core/validation"
-	c "github.com/spiffe/vsecm-sdk-go/lib/crypto"
+	"github.com/spiffe/vsecm-sdk-go/internal/config"
+	reqres "github.com/spiffe/vsecm-sdk-go/internal/core/entity/v1/reqres/safe"
+	env2 "github.com/spiffe/vsecm-sdk-go/internal/core/env"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/validation"
+	"github.com/spiffe/vsecm-sdk-go/internal/debug"
 )
 
 // ErrSecretNotFound is returned when the secret is not found.
@@ -40,16 +40,10 @@ func Fetch() (reqres.SecretFetchResponse, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	cid, _ := c.RandomString(8)
-	if cid == "" {
-		panic("Unable to create a secure correlation id.")
-	}
-
 	var source *workloadapi.X509Source
-
 	source, err := workloadapi.NewX509Source(
 		ctx, workloadapi.WithClientOptions(
-			workloadapi.WithAddr(env.SpiffeSocketUrl()),
+			workloadapi.WithAddr(env2.SpiffeSocketUrl()),
 		),
 	)
 	if err != nil {
@@ -68,7 +62,9 @@ func Fetch() (reqres.SecretFetchResponse, error) {
 		}
 		err := s.Close()
 		if err != nil {
-			log.InfoLn(&cid, "Fetch: problem closing source: ", err.Error())
+			if config.SdkConfig.Debug {
+				debug.Log("Fetch: problem closing source: ", err.Error())
+			}
 		}
 	}(source)
 
@@ -95,7 +91,7 @@ func Fetch() (reqres.SecretFetchResponse, error) {
 		return errors.New("Fetch: I don't know you, and it's crazy: '" + id.String() + "'")
 	})
 
-	p, err := url.JoinPath(env.EndpointUrlForSafe(), "/workload/v1/secrets")
+	p, err := url.JoinPath(env2.EndpointUrlForSafe(), "/workload/v1/secrets")
 	if err != nil {
 		return reqres.SecretFetchResponse{},
 			errors.New("fetch: problem generating server url")
@@ -113,8 +109,8 @@ func Fetch() (reqres.SecretFetchResponse, error) {
 		},
 	}
 
-	log.TraceLn(&cid, "Sentry:Fetch", p)
-	log.TraceLn(&cid, "Sentry:Fetch svid:id: ", svid.ID.String())
+	debug.Log("Sentry:Fetch", p)
+	debug.Log("Sentry:Fetch svid:id: ", svid.ID.String())
 
 	r, err := client.Get(p)
 	if err != nil {
@@ -128,7 +124,7 @@ func Fetch() (reqres.SecretFetchResponse, error) {
 		err := b.Close()
 		if err != nil {
 			if err != nil {
-				log.InfoLn(&cid, "Fetch: problem closing response body: ", err.Error())
+				debug.Log("Fetch: problem closing response body: ", err.Error())
 			}
 		}
 	}(r.Body)

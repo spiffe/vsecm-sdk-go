@@ -6,10 +6,9 @@
 package template
 
 import (
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/symbol"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/val"
 	"strings"
-
-	"github.com/spiffe/vsecm-sdk-go/core/constants/symbol"
-	"github.com/spiffe/vsecm-sdk-go/core/constants/val"
 )
 
 // removeKeyValueWithNoValue takes an input string containing key-value pairs

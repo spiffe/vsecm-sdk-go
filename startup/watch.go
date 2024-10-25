@@ -6,12 +6,11 @@
 package startup
 
 import (
+	"github.com/spiffe/vsecm-sdk-go/internal/debug"
 	"os"
 	"time"
 
-	"github.com/spiffe/vsecm-sdk-go/core/env"
-	log "github.com/spiffe/vsecm-sdk-go/core/log/std"
-	"github.com/spiffe/vsecm-sdk-go/lib/crypto"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/env"
 )
 
 // Watch continuously polls the associated secret of the workload to exist.
@@ -24,17 +23,12 @@ func Watch(waitTimeBeforeExit time.Duration) {
 	interval := env.PollIntervalForInitContainer()
 	ticker := time.NewTicker(interval)
 
-	cid, _ := crypto.RandomString(8)
-	if cid == "" {
-		panic("Unable to create a secure correlation id.")
-	}
-
 	for {
 		select {
 		case <-ticker.C:
-			log.InfoLn(&cid, "init:: tick")
+			debug.Log("init:: tick")
 			if initialized() {
-				log.InfoLn(&cid, "initialized... exiting the init process")
+				debug.Log("initialized... exiting the init process")
 
 				time.Sleep(waitTimeBeforeExit)
 

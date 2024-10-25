@@ -6,12 +6,11 @@
 package sentry
 
 import (
+	"github.com/spiffe/vsecm-sdk-go/internal/debug"
 	"time"
 
-	"github.com/spiffe/vsecm-sdk-go/core/env"
-	log "github.com/spiffe/vsecm-sdk-go/core/log/std"
-	"github.com/spiffe/vsecm-sdk-go/lib/backoff"
-	"github.com/spiffe/vsecm-sdk-go/lib/crypto"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/env"
+	"github.com/spiffe/vsecm-sdk-go/internal/lib/backoff"
 )
 
 // Watch synchronizes the internal state of the sidecar by talking to
@@ -22,16 +21,11 @@ import (
 func Watch() {
 	interval := env.PollIntervalForSidecar()
 
-	cid, _ := crypto.RandomString(8)
-	if cid == "" {
-		panic("Unable to create a secure correlation id.")
-	}
-
 	for {
 		_ = backoff.Retry("sentry.Watch", func() error {
 			err := fetchSecrets()
 			if err != nil {
-				log.InfoLn(&cid, "Could not fetch secrets", err.Error(),
+				debug.Log("Could not fetch secrets", err.Error(),
 					". Will retry in", interval, ".")
 			}
 			return err

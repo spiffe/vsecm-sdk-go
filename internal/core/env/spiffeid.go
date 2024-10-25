@@ -6,7 +6,7 @@
 package env
 
 import (
-	"github.com/spiffe/vsecm-sdk-go/core/constants/env"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/env"
 )
 
 // SpiffeIdPrefixForSafe returns the prefix for the Safe SPIFFE ID.

@@ -6,10 +6,9 @@
 package env
 
 import (
+	"github.com/spiffe/vsecm-sdk-go/internal/core/constants/env"
 	"strconv"
 	"time"
-
-	"github.com/spiffe/vsecm-sdk-go/core/constants/env"
 )
 
 // PollIntervalForSidecar returns the polling interval for sentry in time.Duration
