@@ -28,3 +28,8 @@ go.work.sum
 
 # env file
 .env
+
+# IDEs
+.idea
+.code
+.workspace
