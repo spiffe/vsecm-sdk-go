@@ -13,9 +13,8 @@ package sentry
 import (
 	"bufio"
 	"errors"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/env"
 	"os"
-
-	"github.com/spiffe/vsecm-sdk-go/core/env"
 )
 
 func saveData(data string) error {

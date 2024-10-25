@@ -5,7 +5,9 @@
 
 package data
 
-import "github.com/spiffe/vsecm-sdk-go/lib/entity"
+import (
+	"github.com/spiffe/vsecm-sdk-go/internal/lib/entity"
+)
 
 // SecretFormat represents the format of the secret.
 type SecretFormat string

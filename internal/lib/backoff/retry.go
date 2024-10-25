@@ -6,12 +6,10 @@
 package backoff
 
 import (
+	"github.com/spiffe/vsecm-sdk-go/internal/debug"
 	"math"
 	"math/rand"
 	"time"
-
-	"github.com/spiffe/vsecm-sdk-go/core/crypto"
-	log "github.com/spiffe/vsecm-sdk-go/core/log/std"
 )
 
 // Strategy is a configuration for the backoff strategy to use when retrying
@@ -72,20 +70,18 @@ type Strategy struct {
 //	    fmt.Println("Failed to connect to database after retries:", err)
 //	}
 func Retry(scope string, f func() error, s Strategy) error {
-	cid := crypto.Id()
-
 	s = withDefaults(s)
 	var err error
 
-	log.TraceLn(&cid, "Retry: starting retry loop")
+	debug.Log("Retry: starting retry loop")
 
 	for i := 0; i <= int(s.MaxRetries); i++ {
 		err = f()
 
-		log.TraceLn(&cid, "Retry: executed the function")
+		debug.Log("Retry: executed the function")
 
 		if err == nil {
-			log.TraceLn(&cid, "Retry: success")
+			debug.Log("Retry: success")
 			return nil
 		}
 
@@ -111,11 +107,11 @@ func Retry(scope string, f func() error, s Strategy) error {
 			delay = s.MaxWait
 		}
 
-		log.TraceLn(&cid, "Retry: will sleep:", delay)
+		debug.Log("Retry: will sleep:", delay)
 
 		time.Sleep(delay)
 
-		log.TraceLn(&cid,
+		debug.Log(
 			"Retrying after", delay, "ms for the scope",
 			scope, "-- attempt", i+1, "of", s.MaxRetries+1,
 		)

@@ -6,19 +6,18 @@
 package validation
 
 import (
+	e "github.com/spiffe/vsecm-sdk-go/internal/core/constants/env"
+	env2 "github.com/spiffe/vsecm-sdk-go/internal/core/env"
 	"regexp"
 	"strings"
-
-	e "github.com/spiffe/vsecm-sdk-go/core/constants/env"
-	"github.com/spiffe/vsecm-sdk-go/core/env"
 )
 
 // Any SPIFFE ID regular expression matcher shall start with the
 // `^spiffe://$trustDomain` prefix for extra security.
 //
 // This variable shall be treated as constant and should not be modified.
-var spiffeRegexPrefixStart = "^spiffe://" + env.SpiffeTrustDomain() + "/"
-var spiffeIdPrefixStart = "spiffe://" + env.SpiffeTrustDomain() + "/"
+var spiffeRegexPrefixStart = "^spiffe://" + env2.SpiffeTrustDomain() + "/"
+var spiffeIdPrefixStart = "spiffe://" + env2.SpiffeTrustDomain() + "/"
 
 // IsWorkload checks if a given SPIFFE ID belongs to a workload.
 //
@@ -45,7 +44,7 @@ func IsWorkload(spiffeid string) bool {
 	// "spiffe://mephisto.vsecm.com/workload/mephisto-edge-store/ns/default/sa/default/n/edge-store-7b9468d7cf-675b7"
 	// prefix: "^spiffe://mephisto.vsecm.com/workload/[^/]+/ns/[^/]+/sa/[^/]+/n/[^/]+$"
 	// workload regex: ^spiffe://mephisto.vsecm.com/workload/([^/]+)/ns/[^/]+/sa/[^/]+/n/[^/]+$
-	prefix := env.SpiffeIdPrefixForWorkload()
+	prefix := env2.SpiffeIdPrefixForWorkload()
 
 	if strings.HasPrefix(prefix, spiffeRegexPrefixStart) {
 		re, err := regexp.Compile(prefix)
@@ -55,13 +54,13 @@ func IsWorkload(spiffeid string) bool {
 					"for SPIFFE ID." +
 					" Check the " + string(e.VSecMSpiffeIdPrefixWorkload) +
 					" environment variable. " +
-					" val: " + env.SpiffeIdPrefixForWorkload() +
-					" trust: " + env.SpiffeTrustDomain(),
+					" val: " + env2.SpiffeIdPrefixForWorkload() +
+					" trust: " + env2.SpiffeTrustDomain(),
 			)
 			return false
 		}
 
-		nrw := env.NameRegExpForWorkload()
+		nrw := env2.NameRegExpForWorkload()
 		wre, err := regexp.Compile(nrw)
 		if err != nil {
 			panic(
@@ -69,8 +68,8 @@ func IsWorkload(spiffeid string) bool {
 					"for SPIFFE ID." +
 					" Check the " + string(e.VSecMWorkloadNameRegExp) +
 					" environment variable." +
-					" val: " + env.NameRegExpForWorkload() +
-					" trust: " + env.SpiffeTrustDomain(),
+					" val: " + env2.NameRegExpForWorkload() +
+					" trust: " + env2.SpiffeTrustDomain(),
 			)
 			return false
 		}
@@ -87,7 +86,7 @@ func IsWorkload(spiffeid string) bool {
 		return false
 	}
 
-	nrw := env.NameRegExpForWorkload()
+	nrw := env2.NameRegExpForWorkload()
 	if !strings.HasPrefix(nrw, spiffeRegexPrefixStart) {
 
 		// Insecure configuration detected.
@@ -97,8 +96,8 @@ func IsWorkload(spiffeid string) bool {
 				" Expected: ^spiffe://<trust_domain>/..." +
 				" Check the " + string(e.VSecMWorkloadNameRegExp) +
 				" environment variable." +
-				" val: " + env.NameRegExpForWorkload() +
-				" trust: " + env.SpiffeTrustDomain(),
+				" val: " + env2.NameRegExpForWorkload() +
+				" trust: " + env2.SpiffeTrustDomain(),
 		)
 		return false
 	}
@@ -110,8 +109,8 @@ func IsWorkload(spiffeid string) bool {
 				"for SPIFFE ID." +
 				" Check the " + string(e.VSecMWorkloadNameRegExp) +
 				" environment variable." +
-				" val: " + env.NameRegExpForWorkload() +
-				" trust: " + env.SpiffeTrustDomain(),
+				" val: " + env2.NameRegExpForWorkload() +
+				" trust: " + env2.SpiffeTrustDomain(),
 		)
 		return false
 	}
@@ -149,7 +148,7 @@ func IsSafe(spiffeid string) bool {
 		return false
 	}
 
-	prefix := env.SpiffeIdPrefixForSafe()
+	prefix := env2.SpiffeIdPrefixForSafe()
 
 	if strings.HasPrefix(prefix, spiffeRegexPrefixStart) {
 		re, err := regexp.Compile(prefix)
@@ -159,8 +158,8 @@ func IsSafe(spiffeid string) bool {
 					"for Sentinel SPIFFE ID." +
 					" Check the " + string(e.VSecMSpiffeIdPrefixSafe) +
 					" environment variable." +
-					" val: " + env.SpiffeIdPrefixForSafe() +
-					" trust: " + env.SpiffeTrustDomain(),
+					" val: " + env2.SpiffeIdPrefixForSafe() +
+					" trust: " + env2.SpiffeTrustDomain(),
 			)
 		}
 
