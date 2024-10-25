@@ -1,5 +1,3 @@
-## **VMware Secrets Manager** *for cloud-native apps*
-
 ![VSecM Logo](https://vsecm.com/vsecm.png)
 
 ## VMware Secrets Manager Go SDK
