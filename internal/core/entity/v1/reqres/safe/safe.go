@@ -62,6 +62,16 @@ type SecretFetchResponse struct {
 	Err     string `json:"err,omitempty"`
 }
 
+type SecretStoreRequest struct {
+	Key   string `json:"key"`
+	Value string `json:"data"`
+	Err   string `json:"err,omitempty"`
+}
+
+type SecretStoreResponse struct {
+	Err string `json:"err,omitempty"`
+}
+
 // SecretDeleteRequest is the request to delete a secret.
 type SecretDeleteRequest struct {
 	WorkloadIds []string `json:"workloads"`
