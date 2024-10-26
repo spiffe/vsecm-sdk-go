@@ -19,7 +19,7 @@ import (
 
 	"github.com/spiffe/vsecm-sdk-go/internal/config"
 	reqres "github.com/spiffe/vsecm-sdk-go/internal/core/entity/v1/reqres/safe"
-	env2 "github.com/spiffe/vsecm-sdk-go/internal/core/env"
+	"github.com/spiffe/vsecm-sdk-go/internal/core/env"
 	"github.com/spiffe/vsecm-sdk-go/internal/core/validation"
 	"github.com/spiffe/vsecm-sdk-go/internal/debug"
 )
@@ -43,7 +43,7 @@ func Fetch() (reqres.SecretFetchResponse, error) {
 	var source *workloadapi.X509Source
 	source, err := workloadapi.NewX509Source(
 		ctx, workloadapi.WithClientOptions(
-			workloadapi.WithAddr(env2.SpiffeSocketUrl()),
+			workloadapi.WithAddr(env.SpiffeSocketUrl()),
 		),
 	)
 	if err != nil {
@@ -91,7 +91,7 @@ func Fetch() (reqres.SecretFetchResponse, error) {
 		return errors.New("Fetch: I don't know you, and it's crazy: '" + id.String() + "'")
 	})
 
-	p, err := url.JoinPath(env2.EndpointUrlForSafe(), "/workload/v1/secrets")
+	p, err := url.JoinPath(env.EndpointUrlForSafe(), "/workload/v1/secrets")
 	if err != nil {
 		return reqres.SecretFetchResponse{},
 			errors.New("fetch: problem generating server url")

@@ -21,6 +21,14 @@ func SpiffeIdPrefixForSafe() string {
 	return p
 }
 
+func SpiffeIdPrefixForClerk() string {
+	p := env.Value(env.VSecMSpiffeIdPrefixClerk)
+	if p == "" {
+		p = string(env.VSecMSpiffeIdPrefixClerkDefault)
+	}
+	return p
+}
+
 // SpiffeIdPrefixForWorkload returns the prefix for the Workload's SPIFFE ID.
 // The prefix is obtained from the environment variable
 // VSECM_SPIFFEID_PREFIX_WORKLOAD.
